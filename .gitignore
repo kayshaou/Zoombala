@@ -1,0 +1,16 @@
+.idea
+.gitignore
+
+zbl-registry-pod/target
+zbl-registry-pod/health.iml
+zbl-registry-pod/mvn*
+
+zbl-utils/target
+zbl-utils/HELP.md
+zbl-utils/mvn*
+
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+.gitignore

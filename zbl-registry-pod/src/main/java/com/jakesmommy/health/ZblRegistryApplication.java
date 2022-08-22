@@ -2,12 +2,14 @@ package com.jakesmommy.health;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
 @SpringBootApplication
-public class HealthApplication {
+@EnableEurekaServer
+public class ZblRegistryApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HealthApplication.class, args);
+		SpringApplication.run(ZblRegistryApplication.class, args);
 	}
 
 }
