@@ -2,6 +2,7 @@ package com.jakesmommy.utils.configuration.kafka;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,8 +31,8 @@ public class KafkaConfiguration {
     public Map<String, Object> producerConfigs() throws ClassNotFoundException {
         Map<String, Object> configMap = new HashMap<>();
         configMap.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_CONFIG);
-        configMap.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, Class.forName(KEY_SERIALIZER_CLASS_CONFIG));
-        configMap.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, Class.forName(VALUE_SERIALIZER_CLASS_CONFIG));
+        configMap.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configMap.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return configMap;
     }
 
@@ -46,8 +47,12 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public NewTopic topic1(String topicName) {
-        return new NewTopic(topicName, 1, (short) 1);
+    public NewTopic topic1() {
+        return new NewTopic("zbl_inward", 1, (short) 1);
+    }
+    @Bean
+    public NewTopic topic2() {
+        return new NewTopic("zbl_outward", 1, (short) 1);
     }
 
 
