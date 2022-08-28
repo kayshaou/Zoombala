@@ -5,6 +5,7 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.config.TopicConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -24,17 +25,20 @@ import java.util.Map;
 @Configuration
 @Slf4j
 public class KafkaConfiguration {
-    @Value(value="${kafka.bootstrap.server.config}")
-    public String BOOTSTRAP_SERVERS_CONFIG;
-    @Value(value="${kafka.serializer.class.config}")
-    public String KEY_SERIALIZER_CLASS_CONFIG;
-    @Value(value="${kafka.value.class.config}")
-    public String VALUE_SERIALIZER_CLASS_CONFIG;
+//    @Value(value="${kafka.bootstrap.server.config}")
+//    public String BOOTSTRAP_SERVERS_CONFIG;
+//    @Value(value="${kafka.serializer.class.config}")
+//    public String KEY_SERIALIZER_CLASS_CONFIG;
+//    @Value(value="${kafka.value.class.config}")
+//    public String VALUE_SERIALIZER_CLASS_CONFIG;
     private final GenericWebApplicationContext context;
-    private final TopicConfiguration topicConfig;
-    public KafkaConfiguration(TopicConfiguration topicConfig, GenericWebApplicationContext context){
-        this.topicConfig = topicConfig;
+
+    @Autowired(required = false)
+    TopicConfiguration topicConfiguration;
+
+    public KafkaConfiguration(GenericWebApplicationContext context, TopicConfiguration topicConfiguration){
         this.context = context;
+        this.topicConfiguration = topicConfiguration;
     }
 
     @Bean
@@ -44,7 +48,7 @@ public class KafkaConfiguration {
     @Bean
     public Map<String, Object> producerConfigs() throws ClassNotFoundException {
         Map<String, Object> configMap = new HashMap<>();
-        configMap.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_CONFIG);
+        configMap.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         configMap.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configMap.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return configMap;
@@ -61,13 +65,11 @@ public class KafkaConfiguration {
     }
 
 
-
-
     @PostConstruct
     public void createTopics() {
-        log.info(" -- PostConstruct --");
-        for (TopicConfiguration.TopicConfigModel t : topicConfig.topics) {
-            context.registerBean(t.name, NewTopic.class, t::topic);
+        log.info(" -- PostConstruct --{}");
+        for (TopicConfiguration.TopicConfigModel t : topicConfiguration.getTopics()) {
+            context.registerBean(t.getName(), NewTopic.class, t::topic);
         }
     }
 

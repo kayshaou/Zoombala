@@ -5,29 +5,34 @@ eureka:
     instance:
       preferIpAddress: true
 
+server:
+  port: 8821
+
 spring:
+  config:
+      import: optional:configserver:http://root:s3cr3t@host.docker.internal:8888/
+      label: master
+      profile: ${spring.profile.active}
   application:
     name: zbl-utils
   kafka:
     consumer:
       auto-offset-reset: earliest
-
-server:
-  port: 8820
-
+  profile:
+    active: native
 
 
 
-kafka:
-    bootstrap:
-      server:
-        config: localhost:9092
-    serializer:
-      class:
-        config: StringSerializer.class
-    value:
-      class:
-        config: StringSerializer.class
+#kafka:
+#    bootstrap:
+#      server:
+#        config: localhost:9092
+#    serializer:
+#      class:
+#        config: StringSerializer.class
+#    value:
+#      class:
+#        config: StringSerializer.class
 
 
 

@@ -1,0 +1,15 @@
+#kafka config
+kafkas:
+  topics:
+    -
+      name: zbl_inward
+      numpartitions: 2
+      replicafactor: 1
+    -
+      name: zbl_outward
+      numpartitions: 2
+      replicafactor: 1
+    -
+      name: zbl_inward_fail_records
+      numpartitions: 2
+      replicafactor: 1
