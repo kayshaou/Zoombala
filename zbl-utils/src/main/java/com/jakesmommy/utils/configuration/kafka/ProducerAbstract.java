@@ -8,6 +8,9 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+/**
+ * This class produces message to Kafka
+ */
 @Slf4j
 public abstract class ProducerAbstract {
 

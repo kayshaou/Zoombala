@@ -1,20 +1,28 @@
 package com.jakesmommy.utils.configuration.kafka;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.config.TopicConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.web.context.support.GenericWebApplicationContext;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
+@Slf4j
 public class KafkaConfiguration {
     @Value(value="${kafka.bootstrap.server.config}")
     public String BOOTSTRAP_SERVERS_CONFIG;
@@ -22,6 +30,12 @@ public class KafkaConfiguration {
     public String KEY_SERIALIZER_CLASS_CONFIG;
     @Value(value="${kafka.value.class.config}")
     public String VALUE_SERIALIZER_CLASS_CONFIG;
+    private final GenericWebApplicationContext context;
+    private final TopicConfiguration topicConfig;
+    public KafkaConfiguration(TopicConfiguration topicConfig, GenericWebApplicationContext context){
+        this.topicConfig = topicConfig;
+        this.context = context;
+    }
 
     @Bean
     public ProducerFactory<Integer, String> producerFactory() throws ClassNotFoundException {
@@ -46,14 +60,19 @@ public class KafkaConfiguration {
         return new KafkaAdmin(producerConfigs());
     }
 
-    @Bean
-    public NewTopic topic1() {
-        return new NewTopic("zbl_inward", 1, (short) 1);
+
+
+
+    @PostConstruct
+    public void createTopics() {
+        log.info(" -- PostConstruct --");
+        for (TopicConfiguration.TopicConfigModel t : topicConfig.topics) {
+            context.registerBean(t.name, NewTopic.class, t::topic);
+        }
     }
-    @Bean
-    public NewTopic topic2() {
-        return new NewTopic("zbl_outward", 1, (short) 1);
-    }
+
+
+
 
 
 }

@@ -6,7 +6,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 @Slf4j
 public abstract class ConsumerAbstract {
 
-    @KafkaListener
+    @KafkaListener(topics = {""})
     void listen() {
 
     }
