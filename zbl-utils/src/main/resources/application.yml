@@ -6,7 +6,7 @@ eureka:
       preferIpAddress: true
 
 server:
-  port: 8821
+  port: 8840
 
 spring:
   config:
@@ -33,6 +33,15 @@ spring:
 #    value:
 #      class:
 #        config: StringSerializer.class
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+    health:
+      show-details: always
+
 
 
 

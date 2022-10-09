@@ -1,10 +1,12 @@
 package com.jakesmommy.utils.configuration.kafka;
 
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
@@ -12,16 +14,16 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
  * This class produces message to Kafka
  */
 @Slf4j
-public abstract class ProducerAbstract {
+@NoArgsConstructor
+@Component
+public class ProducerAbstract {
 
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
-
-    void publish(String topicName, String message) {
+    @Autowired KafkaTemplate<String, String> kafkaTemplate;
+    public void publish(String topicName, String message) {
         kafkaTemplate.send(topicName, message);
     }
 
-    void publish(String topicName, String message, boolean isNonBlocking) {
+    public void publish(String topicName, String message, boolean isNonBlocking) {
         ListenableFuture<SendResult<String, String>> future =
                 kafkaTemplate.send(topicName, message);
 
