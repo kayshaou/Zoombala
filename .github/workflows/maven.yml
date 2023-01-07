@@ -27,8 +27,10 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
-    - name: Build zbl-config
+    - name: Package zbl-config
       run: mvn -B package --file zbl-config/pom.xml
+    - name: Build zbl-config Docker image
+      run: docker build . --file zbl-config/Dockerfile --tag zbl-config:$(date +%s)
     - name: Build zbl-registry-pod
       run: mvn -B package --file zbl-registry-pod/pom.xml
 
