@@ -17,7 +17,7 @@ spring:
     name: zbl-utils
   kafka:
     consumer:
-      auto-offset-reset: earliest
+      auto-offset-reset: latest
   profile:
     active: native
 
