@@ -10,5 +10,5 @@ COPY zbl-config/target/config-0.0.1-SNAPSHOT.jar /app
 EXPOSE 8888
 
 # Starting the application
-CMD ["java", "-jar", "config-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "/app/config-0.0.1-SNAPSHOT.jar"]
 
