@@ -53,6 +53,7 @@ jobs:
         context: .
         file: zbl-config/Dockerfile
         push: true
+        platforms: linux/amd64,linux/arm64
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         
@@ -68,6 +69,7 @@ jobs:
         context: .
         file: zbl-registry-pod/Dockerfile
         push: true
+        platforms: linux/amd64,linux/arm64
         tags: ${{ steps.zbl-registry.outputs.tags }}
         labels: ${{ steps.zbl-registry.outputs.labels }}
 
