@@ -24,5 +24,5 @@ FROM openjdk:17
 COPY --from=maven-builder app/target/health-0.0.1-SNAPSHOT.jar /app-service/health-0.0.1-SNAPSHOT.jar
 WORKDIR /app-service
 
-EXPOSE 8888
+EXPOSE 8887
 ENTRYPOINT ["java","-jar","health-0.0.1-SNAPSHOT.jar"]
