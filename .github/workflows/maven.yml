@@ -29,10 +29,12 @@ jobs:
         cache: maven
     - name: Package zbl-config
       run: mvn -B package --file zbl-config/pom.xml 
-    - name: list file
-      run: ls -lat
-    - name: Build zbl-config Docker image
-      run: docker build . --file zbl-config/Dockerfile --tag zbl-config:$(date +%s)
+    - name: Build zbl-registry-pod
+      run: mvn -B package --file zbl-registry-pod/pom.xml
+#     - name: list file
+#       run: ls -lat
+#     - name: Build zbl-config Docker image
+#       run: docker build . --file zbl-config/Dockerfile --tag zbl-config:$(date +%s)
     - name: Log in to Docker Hub
       uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
       with:
@@ -52,8 +54,7 @@ jobs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-    - name: Build zbl-registry-pod
-      run: mvn -B package --file zbl-registry-pod/pom.xml
+
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
    # - name: Update dependency graph
