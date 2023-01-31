@@ -6,7 +6,7 @@ eureka:
       preferIpAddress: true
 
 server:
-  port: 8840
+  port: 8841
 
 spring:
   config:
@@ -16,8 +16,27 @@ spring:
   application:
     name: zbl-utils
   kafka:
+    bootstrap-servers: ${kafka_bootstrap_servers:localhost:19092}
+#    properties:
+#      sasl:
+#        jaas:
+#          config: org.apache.kafka.common.security.plain.PlainLoginModule required username=${kafka_username:'admin'} password=${kafka_password:'admin-secret'};
+#        mechanism: PLAIN
+#      security:
+#        protocol: SASL_PLAINTEXT
     consumer:
       auto-offset-reset: latest
+      max-poll-records: 1
+      fetch-max-wait: 36000
+      enable-auto-commit: false
+      group-id: mygroup_id
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    jaas:
+      enabled: true
+    listener:
+      poll-timeout: 1800000
+      concurrency: 1
   profile:
     active: native
 

@@ -15,7 +15,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
  */
 @Slf4j
 @NoArgsConstructor
-@Component
+@Component("producerAbstract")
 public class ProducerAbstract {
 
     @Autowired KafkaTemplate<String, String> kafkaTemplate;

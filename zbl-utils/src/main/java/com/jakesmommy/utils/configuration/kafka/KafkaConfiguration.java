@@ -26,14 +26,15 @@ import java.util.Map;
 import java.util.UUID;
 
 @Configuration
-@EnableKafka
 @Slf4j
 public class KafkaConfiguration {
     private final GenericWebApplicationContext context;
-    public static final String GROUP_ID = "group_id";
+    public static final String GROUP_ID = "mygroup_id";
 
     @Autowired(required = false)
     TopicConfiguration topicConfiguration;
+
+    final private String bs = "localhost:19092";
 
 
     public KafkaConfiguration(GenericWebApplicationContext context, TopicConfiguration topicConfiguration) {
@@ -49,9 +50,10 @@ public class KafkaConfiguration {
     @Bean
     public Map<String, Object> producerConfigs() throws ClassNotFoundException {
         Map<String, Object> configMap = new HashMap<>();
-        configMap.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        configMap.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bs);
         configMap.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configMap.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configMap.put(ProducerConfig.ACKS_CONFIG, "all");
         return configMap;
     }
 
@@ -70,6 +72,7 @@ public class KafkaConfiguration {
     public void createTopics() {
         log.info(" -- PostConstruct --{}");
         for (TopicConfiguration.TopicConfigModel t : topicConfiguration.getTopics()) {
+            log.info(" topics {}", t.getName());
             context.registerBean(t.getName(), NewTopic.class, t::topic);
         }
 
@@ -84,13 +87,16 @@ public class KafkaConfiguration {
     public ConsumerFactory<String, String> consumerFactory() throws ClassNotFoundException {
         log.info(" consumerFactory registered");
         Map<String, Object> config = new HashMap<>();
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bs);
         config.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+
         return new DefaultKafkaConsumerFactory<>(config);
     }
 
+    @Bean
     public ConcurrentKafkaListenerContainerFactory concurrentKafkaListenerContainerFactory() throws ClassNotFoundException {
         ConcurrentKafkaListenerContainerFactory<String, String> factory
                 = new ConcurrentKafkaListenerContainerFactory<>();

@@ -2,15 +2,19 @@
 kafkas:
   topics:
     -
-      name: zbl_inward
+      name: zbly_inward
       numPartitions: 2
       replicafactor: 1
     -
-      name: zbl_outward
+      name: zbly_outward
       numPartitions: 2
       replicafactor: 1
     -
-      name: zbl_inward_fail_records
+      name: zbly_inward_fail_records
+      numPartitions: 2
+      replicafactor: 1
+    -
+      name: zbly_order_in
       numPartitions: 2
       replicafactor: 1
 
