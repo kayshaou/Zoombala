@@ -31,9 +31,7 @@ jobs:
       
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
-      
-      
-      
+
     - name: Package zbl-config
       run: mvn -B package --file zbl-config/pom.xml 
     - name: Build zbl-registry-pod
